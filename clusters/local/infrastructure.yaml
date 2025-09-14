@@ -38,6 +38,8 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
+  dependsOn:
+    - name: infrastructure  # Wait for MetalLB to be installed first
   path: "./infrastructure/ingress-nginx"
   sourceRef:
     kind: GitRepository

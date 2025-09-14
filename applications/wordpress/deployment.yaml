@@ -49,18 +49,18 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "250m"
-        livenessProbe:
-          httpGet:
-            path: /wp-admin/install.php
-            port: 80
-          initialDelaySeconds: 120
-          periodSeconds: 30
-        readinessProbe:
-          httpGet:
-            path: /wp-admin/install.php
-            port: 80
-          initialDelaySeconds: 30
-          periodSeconds: 10
+        # livenessProbe:
+        #   httpGet:
+        #     path: /wp-admin/install.php
+        #     port: 80
+        #   initialDelaySeconds: 120
+        #   periodSeconds: 30
+        # readinessProbe:
+        #   httpGet:
+        #     path: /wp-admin/install.php
+        #     port: 80
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
       volumes:
       - name: wordpress-persistent-storage
         emptyDir: {}
