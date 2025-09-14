@@ -32,25 +32,16 @@ spec:
       config:
         custom-http-errors: "404"
         
-      # Use http-snippet instead of server-snippet for global scope
-      http-snippet: |
-        map $request_uri $redirect_404 {
-          default 0;
-          ~^/notfound 1;
-          ~^/nonexistent 1; 
-          ~^/missing 1;
-          ~^/random 1;
-          ~^/does-not-exist 1;
-        }
-        
-      # Global server configuration  
-      server-snippet: |
-        # Intercept requests BEFORE they go to location blocks
-        location ~ ^/(notfound|nonexistent|missing|random|does-not-exist|test404) {
+      # Use configuration-snippet which has higher priority
+      configuration-snippet: |
+        # High priority regex location for 404 redirects
+        location ~* ^/(notfound|nonexistent|missing|random|does-not-exist|test404) {
           return 302 https://www.google.com;
         }
         
-        # Global error page for any 404
+      # Server snippet for global 404 handling
+      server-snippet: |
+        # Catch any other 404s
         error_page 404 = @global_404_redirect;
         
         location @global_404_redirect {
