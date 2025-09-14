@@ -37,8 +37,6 @@ metadata:
   name: ingress-nginx
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: metallb-config
   interval: 10m
   path: "./infrastructure/ingress-nginx"
   sourceRef:
