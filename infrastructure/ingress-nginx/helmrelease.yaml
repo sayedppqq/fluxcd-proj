@@ -29,19 +29,31 @@ spec:
         default: true
         controllerValue: "k8s.io/ingress-nginx"
       
+      # Enable snippets
+      allowSnippetAnnotations: true
+      enableSnippets: true
+      
       config:
         custom-http-errors: "404"
-        
-      # Use configuration-snippet which has higher priority
-      configuration-snippet: |
-        # High priority regex location for 404 redirects
-        location ~* ^/(notfound|nonexistent|missing|random|does-not-exist|test404) {
-          return 302 https://www.google.com;
-        }
+        allow-snippet-annotations: "true"
         
       # Server snippet for global 404 handling
       server-snippet: |
-        # Catch any other 404s
+        # Handle 404 redirect paths with highest priority
+        location = /notfound {
+          return 302 https://www.google.com;
+        }
+        location = /nonexistent {
+          return 302 https://www.google.com;
+        }
+        location = /missing {
+          return 302 https://www.google.com;
+        }
+        location = /test404 {
+          return 302 https://www.google.com;
+        }
+        
+        # Global error page for any other 404
         error_page 404 = @global_404_redirect;
         
         location @global_404_redirect {
