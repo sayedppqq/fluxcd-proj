@@ -54,8 +54,8 @@ metadata:
   name: monitoring
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: ingress-nginx
+  # dependsOn:
+  #   - name: ingress-nginx
   interval: 10m
   path: "./infrastructure/monitoring"
   sourceRef:
