@@ -37,26 +37,10 @@ spec:
         custom-http-errors: "404"
         allow-snippet-annotations: "true"
         
-      # Server snippet for global 404 handling
+      # Simplified server snippet - remove potential syntax issues
       server-snippet: |
-        # Handle 404 redirect paths with highest priority
-        location = /notfound {
-          return 302 https://www.google.com;
-        }
-        location = /nonexistent {
-          return 302 https://www.google.com;
-        }
-        location = /missing {
-          return 302 https://www.google.com;
-        }
-        location = /test404 {
-          return 302 https://www.google.com;
-        }
-        
-        # Global error page for any other 404
-        error_page 404 = @global_404_redirect;
-        
-        location @global_404_redirect {
+        error_page 404 = @redirect_404;
+        location @redirect_404 {
           return 302 https://www.google.com;
         }
         
