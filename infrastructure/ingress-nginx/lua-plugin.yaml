@@ -1,3 +1,4 @@
+# infrastructure/ingress-nginx/lua-plugin.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5,13 +6,19 @@ metadata:
   namespace: ingress-nginx
 data:
   404-redirect.lua: |
-    local function redirect_404_to_google()
-      -- Check if the response status is 404
+    -- Global 404 redirect handler
+    -- This script will redirect ANY 404 response to google.com
+    
+    local function handle_404_redirect()
+      -- Check if we got a 404 response
       if ngx.status == 404 then
-        -- Redirect to google.com
-        ngx.redirect("https://www.google.com", 302)
+        -- Log the redirect for debugging
+        ngx.log(ngx.ERR, "Redirecting 404 request for: " .. ngx.var.request_uri .. " to google.com")
+        
+        -- Perform the redirect
+        return ngx.redirect("https://www.google.com", 302)
       end
     end
     
-    -- Execute the redirect function
-    redirect_404_to_google()
+    -- Execute the handler
+    handle_404_redirect()

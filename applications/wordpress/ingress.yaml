@@ -1,4 +1,3 @@
-# applications/wordpress/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -13,49 +12,7 @@ spec:
     http:
       paths:
       - path: /
-        pathType: Exact  # Only exact root path
-        backend:
-          service:
-            name: wordpress
-            port:
-              number: 80
-      - path: /wp-admin
-        pathType: Prefix
-        backend:
-          service:
-            name: wordpress
-            port:
-              number: 80
-      - path: /wp-content
-        pathType: Prefix
-        backend:
-          service:
-            name: wordpress
-            port:
-              number: 80
-      - path: /wp-includes
-        pathType: Prefix
-        backend:
-          service:
-            name: wordpress
-            port:
-              number: 80
-      - path: /index.php
-        pathType: Prefix  # Changed from Exact to Prefix
-        backend:
-          service:
-            name: wordpress
-            port:
-              number: 80
-      - path: /favicon.ico
-        pathType: Exact
-        backend:
-          service:
-            name: wordpress
-            port:
-              number: 80
-      - path: /robots.txt
-        pathType: Exact
+        pathType: Prefix  # Simple prefix match for all WordPress paths
         backend:
           service:
             name: wordpress

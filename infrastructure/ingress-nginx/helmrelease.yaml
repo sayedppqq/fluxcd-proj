@@ -1,4 +1,4 @@
-# infrastructure/ingress-nginx/helmrelease.yaml
+# infrastructure/ingress-nginx/helmrelease-simple.yaml
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -30,17 +30,19 @@ spec:
         controllerValue: "k8s.io/ingress-nginx"
       
       # Enable snippets
-      allowSnippetAnnotations: true
       enableSnippets: true
+      allowSnippetAnnotations: true
       
       config:
         custom-http-errors: "404"
         allow-snippet-annotations: "true"
         
-      # Simplified server snippet - remove potential syntax issues
+      # Simple 404 redirect without Lua complexity
       server-snippet: |
-        error_page 404 = @redirect_404;
-        location @redirect_404 {
+        # Global 404 error handler
+        error_page 404 = @redirect_404_to_google;
+        
+        location @redirect_404_to_google {
           return 302 https://www.google.com;
         }
         
