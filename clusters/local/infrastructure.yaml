@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: "./infrastructure"
+  path: "./infrastructure/metallb"
   sourceRef:
     kind: GitRepository
     name: flux-system
