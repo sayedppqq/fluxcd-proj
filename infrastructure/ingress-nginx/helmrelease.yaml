@@ -32,22 +32,28 @@ spec:
       config:
         custom-http-errors: "404"
         
-      # Add server snippet to handle 404s BEFORE they reach backends
+      # Use http-snippet instead of server-snippet for global scope
+      http-snippet: |
+        map $request_uri $redirect_404 {
+          default 0;
+          ~^/notfound 1;
+          ~^/nonexistent 1; 
+          ~^/missing 1;
+          ~^/random 1;
+          ~^/does-not-exist 1;
+        }
+        
+      # Global server configuration  
       server-snippet: |
-        # Handle specific 404 paths that should redirect to Google
-        location ~* ^/(notfound|nonexistent|missing) {
+        # Intercept requests BEFORE they go to location blocks
+        location ~ ^/(notfound|nonexistent|missing|random|does-not-exist|test404) {
           return 302 https://www.google.com;
         }
         
-        # Default error page for other 404s
-        error_page 404 = @redirect_404;
+        # Global error page for any 404
+        error_page 404 = @global_404_redirect;
         
-        location @redirect_404 {
-          # Check if it's a path that should redirect to Google
-          if ($request_uri ~* ^/(notfound|nonexistent|missing)) {
-            return 302 https://www.google.com;
-          }
-          # For other 404s, you could return a custom page or also redirect
+        location @global_404_redirect {
           return 302 https://www.google.com;
         }
         
